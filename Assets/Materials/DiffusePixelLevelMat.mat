@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SimpleShaderMat
-  m_Shader: {fileID: 4800000, guid: 8387cf0d6017e054bb151b0fbc5afb76, type: 3}
+  m_Name: DiffusePixelLevelMat
+  m_Shader: {fileID: 4800000, guid: 43e5675dd2835694f8397b2980f0e923, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
