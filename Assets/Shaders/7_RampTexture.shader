@@ -2,7 +2,7 @@ Shader "Custom/7_RampTexture"
 {
     Properties
     {
-        _Color ("Color", Color) = (1,1,1,1)
+        _Color ("Color Tint", Color) = (1,1,1,1)
         _RampTex ("Ramp Texture", 2D) = "white" {}
         _Specular ("Specular", Color) = (1,1,1,1)
         _Gloss ("Gloss", Range(8.0,256)) = 20
