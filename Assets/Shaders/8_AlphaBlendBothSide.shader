@@ -87,7 +87,7 @@ Shader "Custom/8_AlphaBlendBothSide"
                 "LightMode"="ForwardBase"
             }
             
-            // 先渲染正面
+            // 再渲染背面
             Cull Back
 
             // 关闭深度写入；开启混合模式。
