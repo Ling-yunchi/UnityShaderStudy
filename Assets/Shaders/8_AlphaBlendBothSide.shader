@@ -21,7 +21,7 @@ Shader "Custom/8_AlphaBlendBothSide"
             {
                 "LightMode"="ForwardBase"
             }
-            
+
             // 先渲染正面
             Cull Front
 
@@ -79,14 +79,14 @@ Shader "Custom/8_AlphaBlendBothSide"
             }
             ENDCG
         }
-        
-                Pass
+
+        Pass
         {
             Tags
             {
                 "LightMode"="ForwardBase"
             }
-            
+
             // 再渲染背面
             Cull Back
 
