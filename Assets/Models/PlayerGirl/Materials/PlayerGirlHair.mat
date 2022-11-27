@@ -8,9 +8,10 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PlayerGirlHair
-  m_Shader: {fileID: 4800000, guid: 06b0316bccdf48247843271f06bd88a3, type: 3}
+  m_Shader: {fileID: 4800000, guid: b5f0da76863040389ce15876493c59d2, type: 3}
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _TESTMODE_NONE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -20,19 +21,63 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BodyDiffuse:
+        m_Texture: {fileID: 2800000, guid: 6d7a64d46138c424886185765b6ea969, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BodyLightMap:
+        m_Texture: {fileID: 2800000, guid: be4d4fb38b8f85e459751eea1e98ea70, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BodyShadowRamp:
+        m_Texture: {fileID: 2800000, guid: 9542b5f385906144ab72f7282f381f69, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HairDiffuse:
+        m_Texture: {fileID: 2800000, guid: 6d7a64d46138c424886185765b6ea969, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HairLightMap:
+        m_Texture: {fileID: 2800000, guid: be4d4fb38b8f85e459751eea1e98ea70, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HairShadowRamp:
+        m_Texture: {fileID: 2800000, guid: 1a12c99286d85bc40a193277799665b3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _LightMap:
+        m_Texture: {fileID: 2800000, guid: be4d4fb38b8f85e459751eea1e98ea70, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 6d7a64d46138c424886185765b6ea969, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _ShadowRamp:
+        m_Texture: {fileID: 2800000, guid: 1a12c99286d85bc40a193277799665b3, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DiffuseThreshold: -1.63
+    - _Factor: 0.291
     - _Gloss: 20
     - _LightSmooth: 0.1
+    - _Outline: 2.44
+    - _RampOffset: 0
+    - _ShadowRampLerp: 0
+    - _ShadowRange: -0.36
+    - _ShadowSmooth: 0.677
+    - _SpecularPowerValue: 0.34
+    - _SpecularScale: 2.74
+    - _TestMode: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Diffuse: {r: 1, g: 1, b: 1, a: 1}
+    - _OutColor: {r: 0.5943396, g: 0.3573217, b: 0, a: 0}
     - _ShadowColor: {r: 0.882, g: 0.725, b: 0.698, a: 1}
     - _Specular: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecularColor: {r: 0.5377358, g: 0.48396224, b: 0.48396224, a: 1}
   m_BuildTextureStacks: []
 --- !u!114 &2648123230532005964
 MonoBehaviour:
