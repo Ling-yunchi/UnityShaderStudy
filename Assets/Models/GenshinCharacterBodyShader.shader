@@ -7,6 +7,8 @@ Shader "Genshin/GenshinCharacterBodyShader"
         _BodyShadowRamp ("Body ShadowRamp", 2D) = "white" {}
         _ShadowSmooth ("Shadow Smooth", Range(0, 1)) = 0.5
         _ShadowRampLerp ("Shadow Ramp Lerp", Range(0,1)) = 0.5
+        [KeywordEnum(None,LightMap_R,LightMap_G,LightMap_B,LightMap_A,UV,VertexColor,BaseColor,BaseColor_A)]
+        _TestMode ("Test Mode", Int) = 0
     }
     SubShader
     {
@@ -29,6 +31,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
+                float4 vertexColor : Color;
             };
 
             struct v2f
@@ -37,6 +40,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 float2 uv : TEXCOORD0;
                 float3 worldNormal : TEXCOORD1;
                 fixed3 worldPos : TEXCOORD2;
+                float4 vertexColor : TEXCOORD3;
             };
 
             sampler2D _BodyDiffuse;
@@ -45,6 +49,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
             sampler2D _BodyShadowRamp;
             float _ShadowSmooth;
             float _ShadowRampLerp;
+            int _TestMode;
 
             v2f vert(a2v v)
             {
@@ -53,11 +58,40 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 o.uv = TRANSFORM_TEX(v.uv, _BodyDiffuse);
                 o.worldNormal = mul(v.normal, (float3x3)unity_WorldToObject);
                 o.worldPos = mul(v.vertex, unity_ObjectToWorld).xyz;
+                o.vertexColor = v.vertexColor;
                 return o;
+            }
+
+            fixed4 test_mode(int mode, v2f i)
+            {
+                switch (mode)
+                {
+                case 1:
+                    return tex2D(_BodyLightMap, i.uv).r;
+                case 2:
+                    return tex2D(_BodyLightMap, i.uv).g;
+                case 3:
+                    return tex2D(_BodyLightMap, i.uv).b;
+                case 4:
+                    return tex2D(_BodyLightMap, i.uv).a;
+                case 5:
+                    return float4(i.uv, 0, 0); //uv
+                case 6:
+                    return i.vertexColor.xyzz; //vertexColor
+                case 7:
+                    return tex2D(_BodyDiffuse, i.uv); //baseColor
+                case 8:
+                    return tex2D(_BodyDiffuse, i.uv).a; //baseColor.a
+                default:
+                    return 1;
+                }
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
+                if (_TestMode != 0)
+                    return test_mode(_TestMode, i);
+
                 // fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
                 fixed3 worldNormal = normalize(i.worldNormal);
 

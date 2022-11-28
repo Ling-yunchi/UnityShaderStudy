@@ -21,6 +21,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _FaceDiffuse:
+        m_Texture: {fileID: 2800000, guid: 411a5f8fccea3714d8b2e6d4878868b4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _FaceLightMap:
         m_Texture: {fileID: 2800000, guid: 13e276ba16da5dd4bad0904cfae5805b, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -41,6 +45,7 @@ Material:
     m_Floats:
     - _DiffuseThreshold: 0
     - _FaceLightmpOffset: 0
+    - _FaceShadowAlpha: 0.5
     - _Factor: 0.5
     - _Gloss: 8
     - _LightSmooth: 0.1
