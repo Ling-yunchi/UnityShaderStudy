@@ -94,7 +94,8 @@ Material:
     - _Outline: 0.01
     - _Parallax: 0.02
     - _RampOffset: 0.669
-    - _ShadowRampLerp: 0.5
+    - _ShadowAOIntensity: 0.84
+    - _ShadowRampLerp: 0.45
     - _ShadowRange: 0.5
     - _ShadowSmooth: 0.654
     - _SmoothnessTextureChannel: 0

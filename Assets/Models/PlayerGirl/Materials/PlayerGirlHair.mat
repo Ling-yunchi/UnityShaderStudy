@@ -65,7 +65,8 @@ Material:
     - _LightSmooth: 0.1
     - _Outline: 2.44
     - _RampOffset: 0
-    - _ShadowRampLerp: 0
+    - _ShadowAOIntensity: 0.74
+    - _ShadowRampLerp: 0.4
     - _ShadowRange: -0.36
     - _ShadowSmooth: 0.677
     - _SpecularPowerValue: 0.34
