@@ -76,6 +76,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BlinnPhongSpecularGloss: 9.58
+    - _BlinnPhongSpecularIntensity: 0.27
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -84,8 +86,11 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.29999998
     - _GlossyReflections: 1
+    - _HighlightSpecularGloss: 6.37
+    - _HighlightSpecularIntensity: 0.32
     - _MetalIntensity: 0.5
     - _MetalOffset: 0.5
+    - _MetalSpecularIntensity: 0.25
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -99,6 +104,8 @@ Material:
     - _SpecularExp: 20
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _StepSpecularGloss: 1
+    - _StepSpecularIntensity: 0.27
     - _StepSpecularWidth: 0.5
     - _StrokeRange: 0.5
     - _TestMode: 0

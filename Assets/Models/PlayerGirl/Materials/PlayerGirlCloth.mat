@@ -64,20 +64,27 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _BlinnPhongSpecularGloss: 21.3
+    - _BlinnPhongSpecularIntensity: 0.5
     - _DiffuseThreshold: 0
     - _Factor: 0
-    - _MetalIntensity: 0.5
-    - _MetalOffset: 0.5
+    - _HighlightSpecularGloss: 0.6
+    - _HighlightSpecularIntensity: 0.36
+    - _MetalIntensity: 0.52
+    - _MetalOffset: 0.51
+    - _MetalSpecularIntensity: 0.4
     - _Outline: 1.66
     - _PatternRange: 0.5
     - _RampOffset: 0
-    - _ShadowAOIntensity: 0.33
+    - _ShadowAOIntensity: 0.31
     - _ShadowRampLerp: 0.6
     - _ShadowRange: 0.5
     - _ShadowSmooth: 0.74
-    - _SpecularExp: 1000
+    - _SpecularExp: 301.88
     - _SpecularPowerValue: 1
     - _SpecularScale: 1
+    - _StepSpecularGloss: 0.32
+    - _StepSpecularIntensity: 0.27
     - _StepSpecularWidth: 0.51
     - _StrokeRange: 0.5
     - _TestMode: 0
