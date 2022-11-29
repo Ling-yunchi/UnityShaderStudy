@@ -9,6 +9,7 @@ Shader "Genshin/GenshinCharacterFaceShader"
         _FaceShadowAlpha ("Face Shadow Alpha", Range(0,1)) = 0.5
         [KeywordEnum(None,LightMap_R,LightMap_G,LightMap_B,LightMap_A,UV,VertexColor,BaseColor,BaseColor_A)]
         _TestMode ("Test Mode", Int) = 0
+        _FaceTo ("Face To", Vector) = (0,0,1,0)
     }
     SubShader
     {
@@ -51,6 +52,7 @@ Shader "Genshin/GenshinCharacterFaceShader"
             sampler2D _FaceLightMap;
             float _FaceShadowAlpha;
             int _TestMode;
+            float4 _FaceTo;
 
             v2f vert(a2v v)
             {
@@ -59,7 +61,7 @@ Shader "Genshin/GenshinCharacterFaceShader"
                 o.uv = TRANSFORM_TEX(v.uv, _FaceDiffuse);
                 o.worldNormal = mul(v.normal, (float3x3)unity_WorldToObject);
                 o.worldPos = mul(v.vertex, unity_ObjectToWorld).xyz;
-                o.forward = UnityObjectToWorldNormal(fixed3(0, 0, 1));
+                o.forward = UnityObjectToWorldNormal(_FaceTo.xyz);
                 o.vertexColor = v.vertexColor;
                 return o;
             }
@@ -95,6 +97,7 @@ Shader "Genshin/GenshinCharacterFaceShader"
                     return test_mode(_TestMode, i);
 
                 fixed3 worldForward = normalize(i.forward);
+                // return float4(worldForward, 0);
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
 
                 fixed3 baseColor = tex2D(_FaceDiffuse, i.uv).rgb;

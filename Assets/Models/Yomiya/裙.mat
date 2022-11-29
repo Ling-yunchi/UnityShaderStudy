@@ -61,6 +61,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 108ce34d2fb6ed84ab4b652a15c28520, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MetalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -88,28 +92,34 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _MetalIntensity: 0.5
+    - _MetalOffset: 0.5
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Outline: 0.01
+    - _Outline: 2
     - _Parallax: 0.02
+    - _PatternRange: 0.1
     - _RampOffset: 0.669
-    - _ShadowAOIntensity: 0.84
-    - _ShadowRampLerp: 0.45
+    - _ShadowAOIntensity: 0.72
+    - _ShadowRampLerp: 0.06
     - _ShadowRange: 0.5
-    - _ShadowSmooth: 0.654
+    - _ShadowSmooth: 0.71
     - _SmoothnessTextureChannel: 0
+    - _SpecularExp: 20
     - _SpecularHighlights: 1
     - _SpecularPowerValue: 1
     - _SpecularScale: 1
     - _SrcBlend: 1
+    - _StepSpecularWidth: 0.5
+    - _StrokeRange: 0.54
     - _TestMode: 0
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _OutColor: {r: 0, g: 0, b: 0, a: 0}
+    - _OutColor: {r: 0.33962262, g: 0.33962262, b: 0.33962262, a: 0}
     - _ShadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.2}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

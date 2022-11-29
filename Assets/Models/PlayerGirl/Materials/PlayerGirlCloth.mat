@@ -54,6 +54,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: ba86d097c9f325b4bb2538b959f07180, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _MetalMap:
+        m_Texture: {fileID: 2800000, guid: f5243c284cdf0e54b8f0fecbd3c6b7fc, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowRamp:
         m_Texture: {fileID: 2800000, guid: 2ec283506067d074890c668a18490298, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -62,14 +66,20 @@ Material:
     m_Floats:
     - _DiffuseThreshold: 0
     - _Factor: 0
+    - _MetalIntensity: 0.5
+    - _MetalOffset: 0.5
     - _Outline: 1.66
+    - _PatternRange: 0.5
     - _RampOffset: 0
-    - _ShadowAOIntensity: 0.94
-    - _ShadowRampLerp: 0.33
+    - _ShadowAOIntensity: 0.33
+    - _ShadowRampLerp: 0.6
     - _ShadowRange: 0.5
-    - _ShadowSmooth: 0.627
+    - _ShadowSmooth: 0.74
+    - _SpecularExp: 1000
     - _SpecularPowerValue: 1
     - _SpecularScale: 1
+    - _StepSpecularWidth: 0.51
+    - _StrokeRange: 0.5
     - _TestMode: 0
     m_Colors:
     - _OutColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0}

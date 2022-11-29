@@ -53,6 +53,12 @@ Shader "Genshin/GenshinCharacterHairShader"
             float _ShadowRampLerp;
             int _TestMode;
 
+            float _HairRange;
+            float _HairViewSpecularThreshold;
+            float _HairSpecAreaBaseline;
+            float _HairAccGroveBaseline;
+
+
             v2f vert(a2v v)
             {
                 v2f o;
@@ -114,7 +120,8 @@ Shader "Genshin/GenshinCharacterHairShader"
                 float halfLambert = dot(worldNormal, worldLightDir) * 0.5 + 0.5;
                 halfLambert = smoothstep(0, _ShadowSmooth, halfLambert);
 
-                float shadowAO = lerp(lightMap.g, 1, _ShadowAOIntensity);
+                float shadowAO = smoothstep(0.2, 0.5, lightMap.g);
+                shadowAO = lerp(shadowAO, 1, _ShadowAOIntensity);
                 float rampU = clamp(halfLambert, 0.00390625, 1 - 0.00390625);
                 // 0.03是为了防止rampValue为0
                 // 对不同质感的区域进行采样
@@ -142,6 +149,12 @@ Shader "Genshin/GenshinCharacterHairShader"
                 finalRamp = finalRamp * shadowAO;
                 finalRamp = lerp(finalRamp, half3(1, 1, 1), _ShadowRampLerp);
                 float3 finalColor = finalRamp * baseColor;
+
+                float3 viewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+                float halfVec = normalize(viewDir + worldLightDir);
+                float nv = dot(worldNormal, viewDir);
+                float nh = dot(worldNormal, halfVec);
+                
 
                 return float4(finalColor, 1);
             }

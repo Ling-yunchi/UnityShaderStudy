@@ -5,11 +5,28 @@ Shader "Genshin/GenshinCharacterBodyShader"
         _BodyDiffuse ("Body Diffuse", 2D) = "white" {}
         _BodyLightMap ("Body LightMap", 2D) = "white" {}
         _BodyShadowRamp ("Body ShadowRamp", 2D) = "white" {}
+
         _ShadowSmooth ("Shadow Smooth", Range(0, 1)) = 0.5
         _ShadowAOIntensity ("Shadow AO Intensity", Range(0, 1)) = 0.5
         _ShadowRampLerp ("Shadow Ramp Lerp", Range(0,1)) = 0.5
+
+        _StepSpecularWidth ("Step Specular Width", Range(0, 1)) = 0.5
+        _SpecularExp ("Specular Exp", Range(0, 1000)) = 20
+
+        _MetalMap ("Metal Map", 2D) = "white" {}
+        _MetalOffset ("Metal Offset", Range(0, 1)) = 0.5
+        _MetalIntensity ("Metal Intensity", Range(0, 1)) = 0.5
+
+        _Outline("Thick of Outline",Float) = 0.01
+        _Factor("Factor",range(0,1)) = 0.5
+        _OutColor("OutColor",color) = (0,0,0,0)
+
         [KeywordEnum(None,LightMap_R,LightMap_G,LightMap_B,LightMap_A,UV,VertexColor,BaseColor,BaseColor_A)]
         _TestMode ("Test Mode", Int) = 0
+
+
+        _StrokeRange ("Stroke Range", Range(0, 10)) = 0.5
+        _PatternRange ("Pattern Range", Range(0, 10)) = 0.5
     }
     SubShader
     {
@@ -51,7 +68,15 @@ Shader "Genshin/GenshinCharacterBodyShader"
             float _ShadowSmooth;
             float _ShadowAOIntensity;
             float _ShadowRampLerp;
+            float _StepSpecularWidth;
+            float _SpecularExp;
+            sampler2D _MetalMap;
+            float _MetalOffset;
+            float _MetalIntensity;
             int _TestMode;
+
+            float _StrokeRange;
+            float _PatternRange;
 
             v2f vert(a2v v)
             {
@@ -99,6 +124,8 @@ Shader "Genshin/GenshinCharacterBodyShader"
 
                 // 获取主光源方向
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
+                float3 viewDir = normalize(UnityWorldSpaceViewDir(i.worldPos));
+                float halfVec = normalize(viewDir + worldLightDir);
 
                 // 采样
                 // light map:
@@ -114,7 +141,11 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 float halfLambert = dot(worldNormal, worldLightDir) * 0.5 + 0.5;
                 halfLambert = smoothstep(0, _ShadowSmooth, halfLambert);
 
-                float shadowAO = lerp(lightMap.g, 1, _ShadowAOIntensity);
+                // ========== Diffuse ==========
+
+                // 使用smoothstep函数截取常暗区域
+                float shadowAO = smoothstep(0.2, 0.5, lightMap.g);
+                shadowAO = lerp(shadowAO, 1, _ShadowAOIntensity);
                 float rampU = clamp(halfLambert, 0.00390625, 1 - 0.00390625);
                 // 0.03是为了防止rampValue为0
                 // 对不同质感的区域进行采样
@@ -141,9 +172,125 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 half3 finalRamp = tex2D(_BodyShadowRamp, float2(rampU, lightMap.a * 0.45 + rampVBase)).rgb;
                 finalRamp = finalRamp * shadowAO;
                 finalRamp = lerp(finalRamp, half3(1, 1, 1), _ShadowRampLerp);
-                float3 finalColor = finalRamp * baseColor;
+                float3 diffuse = finalRamp;
+
+                // ========== Specular ==========
+
+                float nv = dot(worldNormal, viewDir);
+                float nh = dot(worldNormal, halfVec);
+
+                float4 metalMap = tex2D(_MetalMap, mul((float3x3)UNITY_MATRIX_V, i.worldNormal)).r;
+                metalMap = saturate(metalMap);
+                metalMap = step(_MetalOffset, metalMap) * _MetalIntensity;
+
+                //衣服材质，高光区间
+                half strokeVMask = step(1 - _StrokeRange, nv);
+                half patternVMask = step(1 - _PatternRange, nv);
+
+                half strokeMask = step(0.001, lightMap.r) - step(_StrokeRange, lightMap.r);
+                half3 strokeSpecular = lightMap.b * strokeVMask * strokeMask;
+                half patternMask = step(_StrokeRange, lightMap.r) - step(_PatternRange, lightMap.r);
+                half3 patternSpecular = lightMap.b * patternVMask * patternMask;
+
+                half metalMask = step(_PatternRange, lightMap.r);
+                half3 metalSpecular = metalMap * metalMask * _MetalIntensity;
+
+                half3 specular = strokeSpecular + patternSpecular + metalSpecular;
+
+                // float3 specular = 0;
+                // float3 stepSpecular = 0;
+                // float3 stepSpecular2 = 0;
+                // float _StepSpecularWidth = 1;
+                // float _StepSpecularWidth2 = 1;
+                // float _StepSpecularWidth3 = 1;
+                // float _StepSpecularWidth4 = 1;
+                // float _StepSpecularIntensity = 5;
+                // float _StepSpecularIntensity2 = 5;
+                // float _StepSpecularIntensity3 = 5;
+                // float _StepSpecularIntensity4 = 5;
+                // float _StepSpecularIntensity5 = 0.5;
+                // float linearMask = pow(lightMap.r, 1 / 2.2);
+                // float specularLayer = linearMask * 255;
+                // float stepSpecularMask = step(200, pow(1, 1 / 2.2) * 255);
+                // if (specularLayer < 50)
+                // {
+                //     stepSpecular = step(1 - _StepSpecularWidth, saturate(nv)) * _StepSpecularIntensity;
+                //     stepSpecular *= baseColor;
+                // }
+                // else if (specularLayer < 150)
+                // {
+                //     stepSpecular = step(1 - _StepSpecularWidth2, saturate(nv)) * _StepSpecularIntensity2;
+                //     stepSpecular *= baseColor;
+                // }
+                // else if (specularLayer < 250)
+                // {
+                //     stepSpecular = step(1 - _StepSpecularWidth3, saturate(nv)) * _StepSpecularIntensity3;
+                //     stepSpecular = lerp(stepSpecular, 0, stepSpecularMask);
+                //     stepSpecular2 = step(1 - _StepSpecularWidth4 * 5, saturate(nv) * stepSpecularMask) *
+                //         _StepSpecularIntensity4;
+                //     stepSpecular *= baseColor;
+                //     stepSpecular2 *= baseColor;
+                // }
+                // else
+                // {
+                //     float halfVec = normalize(viewDir + worldLightDir);
+                //     specular = pow(saturate(dot(worldNormal, halfVec)), _SpecularExp) * _StepSpecularIntensity5;
+                // }
+                //
+                // specular = lerp(stepSpecular, specular, linearMask);
+                // specular = lerp(0, specular, linearMask);
+                // specular = lerp(0, specular, finalRamp);
+
+                float3 finalColor = diffuse * baseColor + specular;
 
                 return float4(finalColor, 1);
+            }
+            ENDCG
+        }
+
+        pass
+        {
+            //处理光照前的pass渲染
+            Tags
+            {
+                "LightMode" = "Always"
+            }
+            Cull Front
+            ZWrite On
+            CGPROGRAM
+            #pragma multi_compile_fog
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+            float _Outline;
+            float _Factor;
+            fixed4 _OutColor;
+
+            struct v2f
+            {
+                float4 pos:SV_POSITION;
+                UNITY_FOG_COORDS(0)
+            };
+
+            v2f vert(appdata_full v)
+            {
+                v2f o;
+                float3 dir = normalize(v.vertex.xyz);
+                float3 dir2 = v.normal;
+                float D = dot(dir, dir2);
+                dir = dir * sign(D);
+                dir = dir * _Factor + dir2 * (1 - _Factor);
+                v.vertex.xyz += dir * _Outline * 0.001;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                UNITY_TRANSFER_FOG(o, o.pos);
+                return o;
+            }
+
+            float4 frag(v2f i) :COLOR
+            {
+                float4 c = _OutColor;
+                UNITY_APPLY_FOG(i.fogCoord, c);
+                return c;
             }
             ENDCG
         }
