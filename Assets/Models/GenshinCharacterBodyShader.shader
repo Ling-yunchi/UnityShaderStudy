@@ -10,6 +10,8 @@ Shader "Genshin/GenshinCharacterBodyShader"
         _ShadowAOIntensity ("Shadow AO Intensity", Range(0, 1)) = 0.5
         _ShadowRampLerp ("Shadow Ramp Lerp", Range(0,1)) = 0.5
 
+        _NormalMap ("Normal Map", 2D) = "bump" {}
+
         _Outline("Thick of Outline",Float) = 0.01
         _Factor("Factor",range(0,1)) = 0.5
         _OutColor("OutColor",color) = (0,0,0,0)
@@ -17,9 +19,6 @@ Shader "Genshin/GenshinCharacterBodyShader"
         [KeywordEnum(None,LightMap_R,LightMap_G,LightMap_B,LightMap_A,UV,VertexColor,BaseColor,BaseColor_A)]
         _TestMode ("Test Mode", Int) = 0
 
-
-        //        _StrokeRange ("Stroke Range", Range(0, 10)) = 0.5
-        //        _PatternRange ("Pattern Range", Range(0, 10)) = 0.5
         _MetalMap ("Metal Map", 2D) = "white" {}
         _StepSpecularGloss ("Step Specular Gloss", Range(0, 1)) = 0.5
         _StepSpecularIntensity ("Step Specular Intensity", Range(0, 10)) = 0.2
@@ -52,6 +51,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
                 float4 vertexColor : Color;
+                float4 tangent : TANGENT;
             };
 
             struct v2f
@@ -61,11 +61,14 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 float3 worldNormal : TEXCOORD1;
                 fixed3 worldPos : TEXCOORD2;
                 float4 vertexColor : TEXCOORD3;
+                float3 worldTangent : TEXCOORD4;
+                float3 worldBinormal : TEXCOORD5;
             };
 
             sampler2D _BodyDiffuse;
             float4 _BodyDiffuse_ST;
             sampler2D _BodyLightMap;
+            sampler2D _NormalMap;
             sampler2D _BodyShadowRamp;
             float _ShadowSmooth;
             float _ShadowAOIntensity;
@@ -87,9 +90,11 @@ Shader "Genshin/GenshinCharacterBodyShader"
             {
                 v2f o;
                 o.pos = UnityObjectToClipPos(v.vertex);
-                o.uv = TRANSFORM_TEX(v.uv, _BodyDiffuse);
-                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                o.uv.xy = TRANSFORM_TEX(v.uv, _BodyDiffuse);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                o.worldTangent = UnityObjectToWorldDir(v.tangent.xyz);
+                o.worldBinormal = cross(o.worldNormal, o.worldTangent) * v.tangent.w;
                 o.vertexColor = v.vertexColor;
                 return o;
             }
@@ -107,7 +112,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 case 4:
                     return tex2D(_BodyLightMap, i.uv).a;
                 case 5:
-                    return float4(i.uv, 0, 0); //uv
+                    return float4(i.uv, 1, 1); //uv
                 case 6:
                     return i.vertexColor.xyzz; //vertexColor
                 case 7:
@@ -124,8 +129,11 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 if (_TestMode != 0)
                     return test_mode(_TestMode, i);
 
-                // fixed3 ambient = UNITY_LIGHTMODEL_AMBIENT.xyz;
-                fixed3 worldNormal = i.worldNormal;
+                // fixed3 worldNormal = i.worldNormal;
+                // tangent space normal map
+                fixed3 normalMap = UnpackNormal(tex2D(_NormalMap, i.uv));
+                fixed3 worldNormal =
+                    normalize(mul(normalMap, float3x3(i.worldTangent, i.worldBinormal, i.worldNormal)));
 
                 // 获取主光源方向
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
