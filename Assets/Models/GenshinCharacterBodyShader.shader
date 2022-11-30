@@ -35,6 +35,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
         {
             "RenderType"="ForwardBase"
         }
+        Cull Off
 
         Pass
         {
