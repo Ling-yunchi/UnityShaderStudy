@@ -122,4 +122,5 @@ Shader "Genshin/GenshinCharacterFaceShader"
             ENDCG
         }
     }
+    FallBack "Specular"
 }

@@ -23,6 +23,9 @@ Shader "Genshin/GenshinCharacterBodyShader"
         _MetalSpecularIntensity ("Metal Specular Intensity", Range(0, 1)) = 0.5
         _HighlightSpecularGloss ("Highlight Specular Gloss", Range(0.01, 10)) = 0.5
         _HighlightSpecularIntensity ("Highlight Specular Intensity", Range(0, 1)) = 0.5
+        [Toggle] _EnableEdgeRim ("Enable Edge Rim", Int) = 0
+        _EdgeRimColor ("Edge Rim Color", Color) = (1, 1, 1, 1)
+        _EdgeRimThreshold ("Edge Rim Threshold", Range(0, 1)) = 0.5
         [Space(10)]
 
         [Header(Normal Map)][Space(5)]
@@ -46,6 +49,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
             "RenderType"="ForwardBase"
         }
         Cull Off
+        ZTest LEqual
 
         Pass
         {
@@ -61,7 +65,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 uv : TEXCOORD0;
-                float4 vertexColor : Color;
+                float4 vertexColor : COLOR0;
                 float4 tangent : TANGENT;
             };
 
@@ -71,9 +75,9 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 float2 uv : TEXCOORD0;
                 float3 worldNormal : TEXCOORD1;
                 fixed3 worldPos : TEXCOORD2;
-                float4 vertexColor : TEXCOORD3;
-                float3 worldTangent : TEXCOORD4;
-                float3 worldBinormal : TEXCOORD5;
+                float3 worldTangent : TEXCOORD3;
+                float3 worldBinormal : TEXCOORD4;
+                float4 vertexColor : COLOR0;
             };
 
             sampler2D _BodyDiffuse;
@@ -86,8 +90,6 @@ Shader "Genshin/GenshinCharacterBodyShader"
             float _ShadowRampLerp;
             int _TestMode;
 
-            // float _StrokeRange;
-            // float _PatternRange;
             sampler2D _MetalMap;
             float _StepSpecularGloss;
             float _StepSpecularIntensity;
@@ -96,6 +98,11 @@ Shader "Genshin/GenshinCharacterBodyShader"
             float _MetalSpecularIntensity;
             float _HighlightSpecularGloss;
             float _HighlightSpecularIntensity;
+            int _EnableEdgeRim;
+            float4 _EdgeRimColor;
+            float _EdgeRimThreshold;
+
+            sampler2D _CameraDepthTexture;
 
             v2f vert(a2v v)
             {
@@ -143,8 +150,8 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 // fixed3 worldNormal = i.worldNormal;
                 // tangent space normal map
                 fixed3 normalMap = UnpackNormal(tex2D(_NormalMap, i.uv));
-                fixed3 worldNormal =
-                    normalize(mul(normalMap, float3x3(i.worldTangent, i.worldBinormal, i.worldNormal)));
+                float3x3 TBN = float3x3(i.worldTangent, i.worldBinormal, i.worldNormal);
+                fixed3 worldNormal = normalize(mul(normalMap, TBN));
 
                 // 获取主光源方向
                 fixed3 worldLightDir = normalize(UnityWorldSpaceLightDir(i.worldPos));
@@ -229,6 +236,51 @@ Shader "Genshin/GenshinCharacterBodyShader"
 
                 float3 specular = blinnPhongSpecular + metalSpecular + stepSpecular + highlightSpecular;
 
+                // ========== 屏幕空间深度边缘光 ==========
+                // float2 screenParams = float2(i.pos.x / _ScreenParams.x, i.pos.y / _ScreenParams.y);
+                // float _OffsetMul = 0.5;
+                // // 法线外扩检测
+                // float2 screenUV = screenParams + float2(i.worldNormal.xy * _OffsetMul / i.pos.w);
+                // // 检查深度进行对比
+                // float offsetDepth = tex2D(_CameraDepthTexture, screenUV).r;
+                // // return float4(offsetDepth, offsetDepth, offsetDepth, 1);
+                // float trueDepth = tex2D(_CameraDepthTexture, screenParams).r;
+                // // return float4(trueDepth, trueDepth, trueDepth, 1);
+                // float linear01OffsetDepth = Linear01Depth(trueDepth);
+                // float linear01TrueDepth = Linear01Depth(offsetDepth);
+                //
+                // float depthDiff = linear01OffsetDepth - linear01TrueDepth;
+                // // return float4(depthDiff, depthDiff, depthDiff, 1);
+                // float rimMask = step(_EdgeRimThreshold, depthDiff);
+                // // return float4(rimMask, rimMask, rimMask, 1);
+                // float3 rimColor = rimMask * _EdgeRimColor.rgb * _EdgeRimColor.a;
+                // // return float4(rimColor, 1);
+                if (_EnableEdgeRim)
+                {
+                    float2 rimScreenUV = float2(i.pos.x / _ScreenParams.x, i.pos.y / _ScreenParams.y);
+                    float3 smoothNormal = normalize(UnpackNormalmapRGorAG(i.vertexColor));
+                    float3x3 tangentTransform = TBN;
+                    float3 worldRimNormal = normalize(mul(smoothNormal, tangentTransform));
+                    float2 rimOffsetUV = float2(
+                        mul((float3x3)UNITY_MATRIX_V, worldRimNormal).xy * _EdgeRimThreshold * 0.01 / i.pos.w);
+                    // return float4(rimOffsetUV, 0, 0);
+                    rimOffsetUV = rimScreenUV + rimOffsetUV;
+
+                    float screenDepth = tex2D(_CameraDepthTexture, rimScreenUV).r;
+                    float linear01ScreenDepth = LinearEyeDepth(screenDepth);
+                    // return float4(linear01ScreenDepth, linear01ScreenDepth, linear01ScreenDepth, 1);
+                    float offsetDepth = tex2D(_CameraDepthTexture, rimOffsetUV).r;
+                    float linear01OffsetDepth = LinearEyeDepth(offsetDepth);
+                    // return float4(linear01OffsetDepth, linear01OffsetDepth, linear01OffsetDepth, 1);
+                    float depthDiff = linear01OffsetDepth - linear01ScreenDepth;
+                    // return float4(depthDiff, depthDiff, depthDiff, 1);
+
+                    float rimMask = step(0.01, depthDiff);
+                    // return float4(rimMask, rimMask, rimMask, 1);
+                    float3 rimColor = rimMask * _EdgeRimColor.rgb * _EdgeRimColor.a;
+                    diffuse = diffuse + rimColor;
+                }
+
                 float3 finalColor = (diffuse + specular) * baseColor;
 
                 return float4(finalColor, 1);
@@ -283,4 +335,5 @@ Shader "Genshin/GenshinCharacterBodyShader"
             ENDCG
         }
     }
+    FallBack "Specular"
 }

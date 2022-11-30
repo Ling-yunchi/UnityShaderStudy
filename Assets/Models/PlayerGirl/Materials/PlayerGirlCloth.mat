@@ -71,6 +71,7 @@ Material:
     - _BlinnPhongSpecularGloss: 21.3
     - _BlinnPhongSpecularIntensity: 0.5
     - _DiffuseThreshold: 0
+    - _EdgeRimThreshold: 0.5
     - _Factor: 0
     - _HighlightSpecularGloss: 0.6
     - _HighlightSpecularIntensity: 0.36
@@ -93,6 +94,7 @@ Material:
     - _StrokeRange: 0.5
     - _TestMode: 0
     m_Colors:
+    - _EdgeRimColor: {r: 1, g: 1, b: 1, a: 0.49803922}
     - _OutColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0}
     - _ShadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.2}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}

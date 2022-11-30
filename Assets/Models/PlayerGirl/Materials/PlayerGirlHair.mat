@@ -57,6 +57,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: cad0b0269e9f48e4d870114a83bc5a6c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowRamp:
         m_Texture: {fileID: 2800000, guid: 1a12c99286d85bc40a193277799665b3, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -66,6 +70,7 @@ Material:
     - _BlinnPhongSpecularGloss: 0.5
     - _BlinnPhongSpecularIntensity: 0.5
     - _DiffuseThreshold: -1.63
+    - _EdgeRimThreshold: 0.3
     - _Factor: 0.291
     - _Gloss: 20
     - _HairAccGroveBaseline: 0.5
@@ -92,6 +97,7 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Diffuse: {r: 1, g: 1, b: 1, a: 1}
+    - _EdgeRimColor: {r: 1, g: 1, b: 1, a: 0.49803922}
     - _OutColor: {r: 0.6509434, g: 0.6010675, b: 0.5367212, a: 0}
     - _ShadowColor: {r: 0.882, g: 0.725, b: 0.698, a: 1}
     - _Specular: {r: 1, g: 1, b: 1, a: 1}
