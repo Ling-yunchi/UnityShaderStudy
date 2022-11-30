@@ -49,6 +49,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 703ab7b0026140e4089b10f00c7cea6e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _FaceShadowMap:
+        m_Texture: {fileID: 2800000, guid: 7d58068e2058a4940a3f33839bbe0e57, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 7d97cb6dcbafcbd4a80b24f71083505a, type: 3}
         m_Scale: {x: 1, y: 1}
