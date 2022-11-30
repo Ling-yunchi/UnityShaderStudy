@@ -11,6 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: b5f0da76863040389ce15876493c59d2, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _ENABLEEDGERIM_OFF
   - _TESTMODE_NONE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -71,7 +72,8 @@ Material:
     - _BlinnPhongSpecularIntensity: 0.5
     - _DiffuseThreshold: -1.63
     - _EdgeRimThreshold: 0.3
-    - _Factor: 0.291
+    - _EnableEdgeRim: 0
+    - _Factor: 0.5
     - _Gloss: 20
     - _HairAccGroveBaseline: 0.5
     - _HairRange: 0.5
@@ -83,7 +85,8 @@ Material:
     - _LightSmooth: 0.1
     - _MetalIntensity: 0.5
     - _MetalSpecularIntensity: 0.5
-    - _Outline: 2.44
+    - _Outline: 2
+    - _OutlineLerp: 0.51
     - _RampOffset: 0
     - _ShadowAOIntensity: 0.8
     - _ShadowRampLerp: 0.29

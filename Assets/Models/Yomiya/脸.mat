@@ -95,7 +95,8 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Outline: 0.01
+    - _Outline: 1
+    - _OutlineLerp: 0.5
     - _Parallax: 0.02
     - _ShadowRange: 0.5
     - _ShadowSmooth: 0.2

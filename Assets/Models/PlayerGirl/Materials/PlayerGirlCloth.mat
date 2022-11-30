@@ -72,13 +72,15 @@ Material:
     - _BlinnPhongSpecularIntensity: 0.5
     - _DiffuseThreshold: 0
     - _EdgeRimThreshold: 0.5
-    - _Factor: 0
+    - _EnableEdgeRim: 0
+    - _Factor: 0.5
     - _HighlightSpecularGloss: 0.6
     - _HighlightSpecularIntensity: 0.36
     - _MetalIntensity: 0.52
     - _MetalOffset: 0.51
     - _MetalSpecularIntensity: 0.4
     - _Outline: 1.66
+    - _OutlineLerp: 0.42
     - _PatternRange: 0.5
     - _RampOffset: 0
     - _ShadowAOIntensity: 0.31

@@ -53,7 +53,8 @@ Material:
     - _Factor: 0.5
     - _Gloss: 8
     - _LightSmooth: 0.1
-    - _Outline: 1.05
+    - _Outline: 1
+    - _OutlineLerp: 0.5
     - _ShadowRange: 0.5
     - _ShadowSmooth: 0.2
     - _SpecularPowerValue: 1

@@ -96,6 +96,7 @@ Material:
     - _DiffuseThreshold: 0
     - _DstBlend: 0
     - _EdgeRimThreshold: 0.28
+    - _EnableEdgeRim: 0
     - _Factor: 0.5
     - _GlossMapScale: 1
     - _Glossiness: 0.29999998
@@ -108,7 +109,8 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
-    - _Outline: 0.01
+    - _Outline: 0.03
+    - _OutlineLerp: 0.5
     - _Parallax: 0.02
     - _PatternRange: 0.5
     - _ShadowAOIntensity: 0.57

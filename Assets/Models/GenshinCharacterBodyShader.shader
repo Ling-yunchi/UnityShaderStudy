@@ -2,13 +2,10 @@ Shader "Genshin/GenshinCharacterBodyShader"
 {
     Properties
     {
-        [Header(Texture)][Space(5)]
-        _BodyDiffuse ("Body Diffuse", 2D) = "white" {}
+        [Header(Diffuse)][Space(5)]
+        [MainTexture] _BodyDiffuse ("Body Diffuse", 2D) = "white" {}
         _BodyLightMap ("Body LightMap", 2D) = "white" {}
         _BodyShadowRamp ("Body ShadowRamp", 2D) = "white" {}
-        [Space(10)]
-
-        [Header(Diffuse)][Space(5)]
         _ShadowSmooth ("Shadow Smooth", Range(0, 1)) = 0.5
         _ShadowAOIntensity ("Shadow AO Intensity", Range(0, 1)) = 0.5
         _ShadowRampLerp ("Shadow Ramp Lerp", Range(0,1)) = 0.5
@@ -35,7 +32,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
         [Header(Outline)][Space(5)]
         _Outline("Thick of Outline",Float) = 0.01
         _Factor("Factor",range(0,1)) = 0.5
-        _OutColor("OutColor",color) = (0,0,0,0)
+        _OutlineLerp("Outline Lerp",range(0,1)) = 0.5
         [Space(10)]
 
         [Header(Test)][Space(5)]
@@ -288,7 +285,7 @@ Shader "Genshin/GenshinCharacterBodyShader"
             ENDCG
         }
 
-        pass
+        Pass
         {
             //处理光照前的pass渲染
             Tags
@@ -304,12 +301,14 @@ Shader "Genshin/GenshinCharacterBodyShader"
             #include "UnityCG.cginc"
             float _Outline;
             float _Factor;
-            fixed4 _OutColor;
+            float _OutlineLerp;
+            sampler2D _BodyDiffuse;
 
             struct v2f
             {
                 float4 pos:SV_POSITION;
-                UNITY_FOG_COORDS(0)
+                float2 uv:TEXCOORD0;
+                UNITY_FOG_COORDS(1)
             };
 
             v2f vert(appdata_full v)
@@ -322,15 +321,17 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 dir = dir * _Factor + dir2 * (1 - _Factor);
                 v.vertex.xyz += dir * _Outline * 0.001;
                 o.pos = UnityObjectToClipPos(v.vertex);
+                o.uv = v.texcoord;
                 UNITY_TRANSFER_FOG(o, o.pos);
                 return o;
             }
 
             float4 frag(v2f i) :COLOR
             {
-                float4 c = _OutColor;
-                UNITY_APPLY_FOG(i.fogCoord, c);
-                return c;
+                float4 color = tex2D(_BodyDiffuse, i.uv);
+                color = lerp(color, float4(0, 0, 0, 1), _OutlineLerp);
+                UNITY_APPLY_FOG(i.fogCoord, color);
+                return color;
             }
             ENDCG
         }

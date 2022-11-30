@@ -76,12 +76,15 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _FaceShadowAlpha: 0.5
+    - _Factor: 0.5
     - _GlossMapScale: 1
     - _Glossiness: 0.31622776
     - _GlossyReflections: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _Outline: 0.01
+    - _OutlineLerp: 0.5
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

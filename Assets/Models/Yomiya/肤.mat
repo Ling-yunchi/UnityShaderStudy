@@ -109,6 +109,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Outline: 2
+    - _OutlineLerp: 0.43
     - _Parallax: 0.02
     - _PatternRange: 0.5
     - _RampOffset: 0.47
