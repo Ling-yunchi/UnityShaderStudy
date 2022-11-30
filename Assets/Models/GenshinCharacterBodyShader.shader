@@ -2,23 +2,19 @@ Shader "Genshin/GenshinCharacterBodyShader"
 {
     Properties
     {
+        [Header(Texture)][Space(5)]
         _BodyDiffuse ("Body Diffuse", 2D) = "white" {}
         _BodyLightMap ("Body LightMap", 2D) = "white" {}
         _BodyShadowRamp ("Body ShadowRamp", 2D) = "white" {}
+        [Space(10)]
 
+        [Header(Diffuse)][Space(5)]
         _ShadowSmooth ("Shadow Smooth", Range(0, 1)) = 0.5
         _ShadowAOIntensity ("Shadow AO Intensity", Range(0, 1)) = 0.5
         _ShadowRampLerp ("Shadow Ramp Lerp", Range(0,1)) = 0.5
+        [Space(10)]
 
-        _NormalMap ("Normal Map", 2D) = "bump" {}
-
-        _Outline("Thick of Outline",Float) = 0.01
-        _Factor("Factor",range(0,1)) = 0.5
-        _OutColor("OutColor",color) = (0,0,0,0)
-
-        [KeywordEnum(None,LightMap_R,LightMap_G,LightMap_B,LightMap_A,UV,VertexColor,BaseColor,BaseColor_A)]
-        _TestMode ("Test Mode", Int) = 0
-
+        [Header(Specular)][Space(5)]
         _MetalMap ("Metal Map", 2D) = "white" {}
         _StepSpecularGloss ("Step Specular Gloss", Range(0, 1)) = 0.5
         _StepSpecularIntensity ("Step Specular Intensity", Range(0, 10)) = 0.2
@@ -27,6 +23,21 @@ Shader "Genshin/GenshinCharacterBodyShader"
         _MetalSpecularIntensity ("Metal Specular Intensity", Range(0, 1)) = 0.5
         _HighlightSpecularGloss ("Highlight Specular Gloss", Range(0.01, 10)) = 0.5
         _HighlightSpecularIntensity ("Highlight Specular Intensity", Range(0, 1)) = 0.5
+        [Space(10)]
+
+        [Header(Normal Map)][Space(5)]
+        _NormalMap ("Normal Map", 2D) = "bump" {}
+        [Space(10)]
+
+        [Header(Outline)][Space(5)]
+        _Outline("Thick of Outline",Float) = 0.01
+        _Factor("Factor",range(0,1)) = 0.5
+        _OutColor("OutColor",color) = (0,0,0,0)
+        [Space(10)]
+
+        [Header(Test)][Space(5)]
+        [KeywordEnum(None,LightMap_R,LightMap_G,LightMap_B,LightMap_A,UV,VertexColor,BaseColor,BaseColor_A)]
+        _TestMode ("Test Mode", Int) = 0
     }
     SubShader
     {
@@ -217,67 +228,6 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 // return float4(highlightSpecular, 1);
 
                 float3 specular = blinnPhongSpecular + metalSpecular + stepSpecular + highlightSpecular;
-
-                // metalMap = saturate(metalMap);
-                // metalMap = step(_MetalOffset, metalMap) * _MetalIntensity;
-                //
-                // //衣服材质，高光区间
-                // half strokeVMask = step(1 - _StrokeRange, nv);
-                // half patternVMask = step(1 - _PatternRange, nv);
-                //
-                // half strokeMask = step(0.001, lightMap.r) - step(_StrokeRange, lightMap.r);
-                // half3 strokeSpecular = lightMap.b * strokeVMask * strokeMask;
-                // half patternMask = step(_StrokeRange, lightMap.r) - step(_PatternRange, lightMap.r);
-                // half3 patternSpecular = lightMap.b * patternVMask * patternMask;
-                //
-                // half metalMask = step(_PatternRange, lightMap.r);
-                // half3 metalSpecular = metalMap * metalMask * _MetalIntensity;
-                //
-                // half3 specular = strokeSpecular + patternSpecular + metalSpecular;
-
-                // float3 specular = 0;
-                // float3 stepSpecular = 0;
-                // float3 stepSpecular2 = 0;
-                // float _StepSpecularWidth = 1;
-                // float _StepSpecularWidth2 = 1;
-                // float _StepSpecularWidth3 = 1;
-                // float _StepSpecularWidth4 = 1;
-                // float _StepSpecularIntensity = 5;
-                // float _StepSpecularIntensity2 = 5;
-                // float _StepSpecularIntensity3 = 5;
-                // float _StepSpecularIntensity4 = 5;
-                // float _StepSpecularIntensity5 = 0.5;
-                // float linearMask = pow(lightMap.r, 1 / 2.2);
-                // float specularLayer = linearMask * 255;
-                // float stepSpecularMask = step(200, pow(1, 1 / 2.2) * 255);
-                // if (specularLayer < 50)
-                // {
-                //     stepSpecular = step(1 - _StepSpecularWidth, saturate(nv)) * _StepSpecularIntensity;
-                //     stepSpecular *= baseColor;
-                // }
-                // else if (specularLayer < 150)
-                // {
-                //     stepSpecular = step(1 - _StepSpecularWidth2, saturate(nv)) * _StepSpecularIntensity2;
-                //     stepSpecular *= baseColor;
-                // }
-                // else if (specularLayer < 250)
-                // {
-                //     stepSpecular = step(1 - _StepSpecularWidth3, saturate(nv)) * _StepSpecularIntensity3;
-                //     stepSpecular = lerp(stepSpecular, 0, stepSpecularMask);
-                //     stepSpecular2 = step(1 - _StepSpecularWidth4 * 5, saturate(nv) * stepSpecularMask) *
-                //         _StepSpecularIntensity4;
-                //     stepSpecular *= baseColor;
-                //     stepSpecular2 *= baseColor;
-                // }
-                // else
-                // {
-                //     float halfVec = normalize(viewDir + worldLightDir);
-                //     specular = pow(saturate(dot(worldNormal, halfVec)), _SpecularExp) * _StepSpecularIntensity5;
-                // }
-                //
-                // specular = lerp(stepSpecular, specular, linearMask);
-                // specular = lerp(0, specular, linearMask);
-                // specular = lerp(0, specular, finalRamp);
 
                 float3 finalColor = (diffuse + specular) * baseColor;
 

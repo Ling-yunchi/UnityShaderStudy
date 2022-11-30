@@ -58,6 +58,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: f5243c284cdf0e54b8f0fecbd3c6b7fc, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _ShadowRamp:
         m_Texture: {fileID: 2800000, guid: 2ec283506067d074890c668a18490298, type: 3}
         m_Scale: {x: 1, y: 1}
