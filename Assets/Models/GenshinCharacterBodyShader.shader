@@ -6,6 +6,8 @@ Shader "Genshin/GenshinCharacterBodyShader"
         [MainTexture] _BodyDiffuse ("Body Diffuse", 2D) = "white" {}
         _BodyLightMap ("Body LightMap", 2D) = "white" {}
         _BodyShadowRamp ("Body ShadowRamp", 2D) = "white" {}
+        _BodyShadowRampLayer ("Body ShadowRamp Layer", Int) = 5
+        [KeywordEnum(Day,Night)] _Day ("Day or Night", Int) = 0
         _ShadowSmooth ("Shadow Smooth", Range(0, 1)) = 0.5
         _ShadowAOIntensity ("Shadow AO Intensity", Range(0, 1)) = 0.5
         _ShadowRampLerp ("Shadow Ramp Lerp", Range(0,1)) = 0.5
@@ -82,6 +84,8 @@ Shader "Genshin/GenshinCharacterBodyShader"
             sampler2D _BodyLightMap;
             sampler2D _NormalMap;
             sampler2D _BodyShadowRamp;
+            int _BodyShadowRampLayer;
+            int _Day;
             float _ShadowSmooth;
             float _ShadowAOIntensity;
             float _ShadowRampLerp;
@@ -178,8 +182,10 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 // 0.03是为了防止rampValue为0
                 // 对不同质感的区域进行采样
 
-                float _Day = 1; // 0-0.5 为白天，0.5-1 为夜晚
-                float rampVBase = _Day < 0.5 ? 0.55 : 0.05; // 决定对上半部分还是下半部分采样
+                // 0-0.5 为白天，0.5-1 为夜晚
+                float rampVBase = _Day < 0.5 ? 33 : 17; // 决定对上半部分还是下半部分采样
+                // float rampPixelU = 0.00390625; // 1/256
+                float rampPixelV = 0.03125; // 1/16/2
 
                 // // 叠加
                 // half3 shadowRamp1 = tex2D(_BodyShadowRamp, float2(rampU, 0.45 + rampVBase)).rgb;
@@ -197,7 +203,10 @@ Shader "Genshin/GenshinCharacterBodyShader"
                 // half3 finalRamp = skinRamp + tightsRamp + metalRamp + softCommonRamp + hardSilkRamp;
 
                 // 优化为直接计算采样点
-                half3 finalRamp = tex2D(_BodyShadowRamp, float2(rampU, lightMap.a * 0.45 + rampVBase)).rgb;
+                // 0-1 remap 1-_HairShadowRampLayer
+                float layer = lerp(1, _BodyShadowRampLayer, lightMap.a);
+                half3 finalRamp = tex2D(_BodyShadowRamp,
+                                        float2(rampU, rampPixelV * (rampVBase - 2 * layer))).rgb;
                 finalRamp = finalRamp * shadowAO;
                 finalRamp = lerp(finalRamp, half3(1, 1, 1), _ShadowRampLerp);
                 float3 diffuse = finalRamp;

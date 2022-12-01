@@ -11,6 +11,7 @@ Material:
   m_Shader: {fileID: 4800000, guid: b5f0da76863040389ce15876493c59d2, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _DAY_DAY
   - _ENABLEEDGERIM_OFF
   - _TESTMODE_NONE
   m_LightmapFlags: 4
@@ -70,6 +71,7 @@ Material:
     m_Floats:
     - _BlinnPhongSpecularGloss: 0.5
     - _BlinnPhongSpecularIntensity: 0.5
+    - _Day: 0
     - _DiffuseThreshold: -1.63
     - _EdgeRimThreshold: 0.3
     - _EnableEdgeRim: 0
@@ -77,6 +79,7 @@ Material:
     - _Gloss: 20
     - _HairAccGroveBaseline: 0.5
     - _HairRange: 0.5
+    - _HairShadowRampLayer: 1
     - _HairSpecAreaBaseline: 0.5
     - _HairViewSpecularIntensity: 0.5
     - _HairViewSpecularThreshold: 0.5
@@ -88,14 +91,14 @@ Material:
     - _Outline: 2
     - _OutlineLerp: 0.51
     - _RampOffset: 0
-    - _ShadowAOIntensity: 0.8
-    - _ShadowRampLerp: 0.29
+    - _ShadowAOIntensity: 0.73
+    - _ShadowRampLerp: 0.18
     - _ShadowRange: -0.36
-    - _ShadowSmooth: 0.6
+    - _ShadowSmooth: 0.57
     - _SpecularPowerValue: 0.34
     - _SpecularScale: 2.74
     - _StepSpecularGloss: 0.38
-    - _StepSpecularIntensity: 0.15
+    - _StepSpecularIntensity: 0.12
     - _TestMode: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

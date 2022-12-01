@@ -24,6 +24,8 @@ Material:
   m_Shader: {fileID: 4800000, guid: 06b0316bccdf48247843271f06bd88a3, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords:
+  - _DAY_DAY
+  - _DAY_ON
   - _TESTMODE_NONE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -43,7 +45,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BodyShadowRamp:
-        m_Texture: {fileID: 2800000, guid: 8762b1a00ca232b40b14a6d8ed3315f5, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2ec283506067d074890c668a18490298, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _LightMap:
@@ -70,6 +72,8 @@ Material:
     m_Floats:
     - _BlinnPhongSpecularGloss: 21.3
     - _BlinnPhongSpecularIntensity: 0.5
+    - _BodyShadowRampLayer: 3
+    - _Day: 0
     - _DiffuseThreshold: 0
     - _EdgeRimThreshold: 0.5
     - _EnableEdgeRim: 0
@@ -83,8 +87,8 @@ Material:
     - _OutlineLerp: 0.42
     - _PatternRange: 0.5
     - _RampOffset: 0
-    - _ShadowAOIntensity: 0.31
-    - _ShadowRampLerp: 0.6
+    - _ShadowAOIntensity: 0.89
+    - _ShadowRampLerp: 0.18
     - _ShadowRange: 0.5
     - _ShadowSmooth: 0.74
     - _SpecularExp: 301.88
@@ -95,6 +99,7 @@ Material:
     - _StepSpecularWidth: 0.51
     - _StrokeRange: 0.5
     - _TestMode: 0
+    - _TestValue: 0.1
     m_Colors:
     - _EdgeRimColor: {r: 1, g: 1, b: 1, a: 0.49803922}
     - _OutColor: {r: 0.5188679, g: 0.5188679, b: 0.5188679, a: 0}
